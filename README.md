@@ -6,7 +6,7 @@ For customers, the application offers the option to register an account, providi
 From the travel agency's standpoint, the application provides tools for efficient reservation management, property handling, and the creation of attractive offers.
 
 
-Technology:
+Technology stack:
 - Java
 - Spring
 - MySQL
