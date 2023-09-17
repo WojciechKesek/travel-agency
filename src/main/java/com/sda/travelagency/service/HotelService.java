@@ -2,6 +2,7 @@ package com.sda.travelagency.service;
 
 import com.sda.travelagency.dtos.HotelDto;
 import com.sda.travelagency.entities.Hotel;
+import com.sda.travelagency.exception.CityNotFoundException;
 import com.sda.travelagency.exception.HotelCantBeDeletedException;
 import com.sda.travelagency.exception.HotelNotFoundException;
 import com.sda.travelagency.mapper.HotelMapper;
@@ -40,12 +41,13 @@ public class HotelService {
         Hotel hotelToDelete = mapperRepository.findByName(name).orElseThrow(() -> new HotelNotFoundException("No such hotel exists"));
         System.out.println(hotelToDelete);
         if (!hotelToDelete.getOffers().isEmpty()) {
-            throw new HotelCantBeDeletedException("Hotel is associated with offers and cannot be deleted.");
+            throw new HotelCantBeDeletedException("Hotel is associated with offers and cannot be deleted");
         }
         mapperRepository.delete(hotelToDelete);
     }
 
     public void updateHotel(String name, HotelDto hotelDto){
+        cityRepository.findByName(hotelDto.getCityName()).orElseThrow(() -> new CityNotFoundException("No such city exists"));
         Hotel hotelToUpdate = mapperRepository.findByName(name).orElseThrow(() -> new HotelNotFoundException("No such hotel exists"));
         hotelToUpdate.setName(hotelDto.getName());
         mapperRepository.save(hotelToUpdate);
@@ -54,7 +56,7 @@ public class HotelService {
 
 
     public void addHotel(HotelDto hotelDto) {
-        Hotel hotel = hotelMapper.hotelDtoToHotel(hotelDto.getName(),cityRepository.findByName(hotelDto.getCityName()).orElseThrow());
+        Hotel hotel = hotelMapper.hotelDtoToHotel(hotelDto.getName(),cityRepository.findByName(hotelDto.getCityName()).orElseThrow(() -> new CityNotFoundException("No such city exists")));
         mapperRepository.save(hotel);
     }
 }

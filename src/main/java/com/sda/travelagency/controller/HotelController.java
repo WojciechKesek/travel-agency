@@ -2,6 +2,7 @@ package com.sda.travelagency.controller;
 
 import com.sda.travelagency.dtos.HotelDto;
 import com.sda.travelagency.service.HotelService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class HotelController {
     }
 
     @GetMapping("/{name}")
-    public HotelDto getHotel(@PathVariable String name){  // should be @PathVariable !!
+    public HotelDto getHotel(@PathVariable String name){
         return hotelService.getHotel(name);
     }
 
@@ -41,8 +42,8 @@ public class HotelController {
     }
 
     @PostMapping("/addHotel")
-    ResponseEntity<String> addHotel(@RequestBody HotelDto hotelDto) {
+    ResponseEntity<String> addHotel(@Valid @RequestBody HotelDto hotelDto) {
         hotelService.addHotel(hotelDto);
-        return new ResponseEntity<>("Hotel created", HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("Hotel created", HttpStatus.CREATED);
     }
 }
