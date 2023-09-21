@@ -179,7 +179,7 @@ class HotelControllerTest {
     @Test
     void shouldDeleteHotel(){
         Hotel hotelToDelete = mapperRepository.findAll().get(0);
-        hotelToDelete.getOffers().forEach(offer -> offerRepository.deleteById(offer.getId()));
+        offerRepository.deleteAll(hotelToDelete.getOffers());
         testClient
                 .delete()
                 .uri("/hotels/{name}",hotelToDelete.getName())

@@ -28,6 +28,11 @@ public class HotelController {
         return hotelService.getHotel(name);
     }
 
+    @GetMapping("/city/{cityName}")
+    public List<HotelDto> getAllHotelinCity(@PathVariable String cityName){
+        return hotelService.getAllHotelsInCity(cityName);
+    }
+
 
     @DeleteMapping("/{hotelName}")
     ResponseEntity<String> deleteHotel(@PathVariable String hotelName) {

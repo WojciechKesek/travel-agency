@@ -6,10 +6,12 @@ import com.sda.travelagency.entities.Hotel;
 import com.sda.travelagency.entities.Offer;
 import com.sda.travelagency.repository.MapperRepository;
 import com.sda.travelagency.repository.OfferRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -29,9 +31,7 @@ class OfferControllerTest {
 
     @Test
     void shouldAddOffer() {
-
         Hotel testHotel = mapperRepository.findAll().get(0);
-
         OfferDto offerDto = new OfferDto(
                 "Test Offer",
                 testHotel.getName(),
@@ -39,7 +39,6 @@ class OfferControllerTest {
                 testHotel.getCity().getCountry().getName(),
                 testHotel.getCity().getCountry().getContinent().getName()
         );
-
         testClient
                 .post()
                 .uri("/offers/addOffer")
@@ -51,7 +50,6 @@ class OfferControllerTest {
 
     @Test
     void shouldGetAllOffers() {
-
         testClient
                 .get()
                 .uri("/offers")
@@ -65,7 +63,6 @@ class OfferControllerTest {
     @Test
     void shouldDeleteOffer() {
         Offer testOffer = offerRepository.findAll().get(0);
-
         testClient
                 .delete()
                 .uri("/offers/{offerName}", testOffer.getName())
@@ -76,9 +73,7 @@ class OfferControllerTest {
 
     @Test
     void shouldGetOfferByName() {
-
         Offer testOffer = offerRepository.findAll().get(1);
-
         OfferDto expectedOfferDto = new OfferDto(
                 testOffer.getName(),
                 testOffer.getHotel().getName(),
@@ -86,7 +81,6 @@ class OfferControllerTest {
                 testOffer.getHotel().getCity().getCountry().getName(),
                 testOffer.getHotel().getCity().getCountry().getContinent().getName()
         );
-
         testClient
                 .get()
                 .uri("/offers/{name}", testOffer.getName())
@@ -114,4 +108,27 @@ class OfferControllerTest {
                 .expectStatus().isAccepted()
                 .expectBody(String.class).isEqualTo("Offer updated");
     }
+
+    @Test
+    void shouldDeleteAllOffersForHotel() {
+        String hotelToClear = mapperRepository.findAll().get(0).getName();
+        testClient
+                .delete()
+                .uri("/offers/hotel/{hotelName}", hotelToClear)
+                .exchange()
+                .expectStatus().isAccepted()
+                .expectBody(String.class).isEqualTo("Offers for " + hotelToClear +  " deleted");
+    }
+    @Test
+    void shouldNotDeleteAllOffersForHotel() {
+        String invalidHotelToClear = "invalidHotelName";
+        ProblemDetail detail = testClient
+                .delete()
+                .uri("/offers/hotel/{hotelName}", invalidHotelToClear)
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectBody(ProblemDetail.class).returnResult().getResponseBody();
+        Assertions.assertEquals("No such hotel exists", detail.getDetail());
+    }
+
 }

@@ -40,6 +40,12 @@ public class OfferController {
         return new ResponseEntity<>("Offer deleted", HttpStatus.ACCEPTED);
     }
 
+    @DeleteMapping("/hotel/{hotelName}")
+    ResponseEntity<String> deleteAllOffersForHotel(@PathVariable String hotelName) {
+        offerService.deleteAllOffersForHotel(hotelName);
+        return new ResponseEntity<>("Offers for " + hotelName + " deleted", HttpStatus.ACCEPTED);
+    }
+
     @PutMapping("/{offerName}")
     ResponseEntity<String> updateOffer(@PathVariable String offerName, @RequestBody OfferDto offerDto) {
         offerService.updateOffer(offerName, offerDto);

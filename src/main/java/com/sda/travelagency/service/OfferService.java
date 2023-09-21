@@ -1,7 +1,9 @@
 package com.sda.travelagency.service;
 
 import com.sda.travelagency.dtos.OfferDto;
+import com.sda.travelagency.entities.Hotel;
 import com.sda.travelagency.entities.Offer;
+import com.sda.travelagency.exception.HotelNotFoundException;
 import com.sda.travelagency.exception.OfferNotFoundException;
 import com.sda.travelagency.mapper.OfferMapper;
 import com.sda.travelagency.repository.MapperRepository;
@@ -44,6 +46,11 @@ public class OfferService {
     public void deleteOffer(String name){
         Offer offerToDelete = offerRepository.findByName(name).orElseThrow(() -> new OfferNotFoundException("No such offer exists"));
         offerRepository.delete(offerToDelete);
+    }
+
+    public void deleteAllOffersForHotel(String hotelName){
+        Hotel hotelToClear = mapperRepository.findByName(hotelName).orElseThrow(() -> new HotelNotFoundException("No such hotel exists"));
+        offerRepository.deleteAll(hotelToClear.getOffers());
     }
 
     public void updateOffer(String name, OfferDto offerDto){

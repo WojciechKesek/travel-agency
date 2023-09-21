@@ -28,8 +28,17 @@ public class HotelService {
     }
 
     public List<HotelDto> getAllHotels(){
-        return mapperRepository.findAll().stream()
-                .map(HotelMapper::hotelToHotelDto).collect(Collectors.toList());
+        return mapperRepository.findAll()
+                .stream()
+                .map(HotelMapper::hotelToHotelDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<HotelDto> getAllHotelsInCity(String cityName){
+        return mapperRepository.findAllByCity_Name(cityName)
+                .stream()
+                .map(HotelMapper::hotelToHotelDto)
+                .collect(Collectors.toList());
     }
 
 
