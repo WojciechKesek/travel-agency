@@ -1,13 +1,17 @@
 package com.sda.travelagency.dtos;
 
+import com.sda.travelagency.annotation.JsonElement;
+import com.sda.travelagency.annotation.JsonSerializable;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.Objects;
-
+@JsonSerializable
 public class HotelDto {
 
+    @JsonElement
     @NotBlank(message = "Hotel name is mandatory")
     private String name;
+    @JsonElement
     @NotBlank(message = "City name is mandatory")
     private String cityName;
 
