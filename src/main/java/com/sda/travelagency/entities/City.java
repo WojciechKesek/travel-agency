@@ -40,9 +40,6 @@ public class City {
     public Country getCountry() {
         return country;
     }
-    public List<Airport> getAirport() {
-        return airport;
-    }
 
     public void setName(String name) {
         this.name = name;

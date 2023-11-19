@@ -1,8 +1,10 @@
 package com.sda.travelagency.mapper;
 
 import com.sda.travelagency.dtos.OfferDto;
+import com.sda.travelagency.entities.City;
 import com.sda.travelagency.entities.Offer;
 import com.sda.travelagency.exception.HotelNotFoundException;
+import com.sda.travelagency.repository.AirportRepository;
 import com.sda.travelagency.repository.HotelRepository;
 import org.springframework.stereotype.Component;
 
@@ -10,10 +12,13 @@ import org.springframework.stereotype.Component;
 public class OfferMapper {
 
     private final HotelRepository hotelRepository;
+    private final AirportRepository airportRepository;
 
-    public OfferMapper(HotelRepository hotelRepository) {
+    public OfferMapper(HotelRepository hotelRepository, AirportRepository airportRepository) {
         this.hotelRepository = hotelRepository;
+        this.airportRepository = airportRepository;
     }
+
 
     /**
      * This method takes as a param HotelDto object.
@@ -37,14 +42,15 @@ public class OfferMapper {
      * @param offer
      * @return OfferDto
      **/
-    public static OfferDto offerToOfferDto(Offer offer){
+    public OfferDto offerToOfferDto(Offer offer){
+        City city = offer.getHotel().getCity();
         OfferDto offerDto = new OfferDto();
         offerDto.setName(offer.getName());
         offerDto.setHotelName(offer.getHotel().getName());
-        offerDto.setAirportName(offer.getHotel().getCity().getAirport().get(0).getName());
-        offerDto.setCityName(offer.getHotel().getCity().getName());
-        offerDto.setCountryName(offer.getHotel().getCity().getCountry().getName());
-        offerDto.setContinentName(offer.getHotel().getCity().getCountry().getContinent().getName());
+        offerDto.setAirportName(airportRepository.findByCity(city).get(0).getName());
+        offerDto.setCityName(city.getName());
+        offerDto.setCountryName(city.getCountry().getName());
+        offerDto.setContinentName(city.getCountry().getContinent().getName());
         offerDto.setPrice(offer.getPrice());
         return offerDto;
     };
