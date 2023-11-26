@@ -1,15 +1,17 @@
 package com.sda.travelagency.service;
 
+import com.sda.travelagency.dtos.OfferAdditionDto;
 import com.sda.travelagency.dtos.OfferDto;
 import com.sda.travelagency.entities.Offer;
 import com.sda.travelagency.exception.HotelNotFoundException;
 import com.sda.travelagency.exception.OfferNotAvailableException;
 import com.sda.travelagency.exception.OfferNotFoundException;
-import com.sda.travelagency.exception.AnnonymousAuthorizationException;
+import com.sda.travelagency.exception.AnonymousAuthorizationException;
 import com.sda.travelagency.mapper.OfferMapper;
 import com.sda.travelagency.repository.HotelRepository;
 import com.sda.travelagency.repository.OfferRepository;
 import com.sda.travelagency.util.Username;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -59,7 +61,7 @@ public class OfferService {
      * @param offerDto
      * @return void
      **/
-    public void addOffer(OfferDto offerDto) {
+    public void addOffer(OfferAdditionDto offerDto) {
         Offer offer = offerMapper.offerDtoToOffer(offerDto);
         offerRepository.save(offer);
     }
@@ -69,12 +71,14 @@ public class OfferService {
      * Then, it uses the OfferRepository class to find Offer object in OfferRepository or else throws OfferNotFoundException,
      * If present it is deleted from database.
      * @param offerName
-     * @return void
+     * @return OfferDto
      * @throws OfferNotFoundException "No such offer exists"
      **/
-    public void deleteOffer(String offerName){
-        Offer offerToDelete = offerRepository.findByName(offerName).orElseThrow(() -> new OfferNotFoundException("No such offer exists"));
+    public OfferDto deleteOffer(String offerName){
+        Offer offerToDelete = offerRepository.findByName(offerName)
+                .orElseThrow(() -> new OfferNotFoundException("No such offer exists"));
         offerRepository.delete(offerToDelete);
+        return offerMapper.offerToOfferDto(offerToDelete);
     }
     /**
      * This method gets an offerName and offerDto as a param.
@@ -85,9 +89,12 @@ public class OfferService {
      * @return void
      * @throws OfferNotFoundException "No such offer exists"
      **/
-    public void updateOffer(String offerName, OfferDto offerDto){
-        Offer offerToUpdate = offerRepository.findByName(offerName).orElseThrow(() -> new OfferNotFoundException("No such offer exists"));
+    public void updateOffer(String offerName, OfferAdditionDto offerDto){
+        Offer offerToUpdate = offerRepository.findByName(offerName)
+                .orElseThrow(() -> new OfferNotFoundException("No such offer exists"));
         offerToUpdate.setName(offerDto.getName());
+        offerToUpdate.setHotel(hotelRepository.findByNameAndCityName(offerDto.getHotelName(), offerDto.getCityName())
+                .orElseThrow(() -> new HotelNotFoundException("No such hotel exists")));
         offerToUpdate.setPrice(offerDto.getPrice());
         offerRepository.save(offerToUpdate);
     }
@@ -96,22 +103,24 @@ public class OfferService {
      * Then, it uses the OfferRepository class to find Offer object in database or else throws OfferNotFoundException,
      * If present it changes username parameter in Offer object from null to active user and save it in database.
      * @param offerName
-     * @return void
+     * @return OfferDto
      * @throws OfferNotFoundException "No such offer exists"
-     * @throws AnnonymousAuthorizationException "Session expired"
+     * @throws AnonymousAuthorizationException "Session expired"
      * @throws OfferNotAvailableException "Offer is already taken"
      **/
-    public void reserveOffer(String offerName) {
-        Offer offerByName = offerRepository.findByName(offerName).orElseThrow(() -> new OfferNotFoundException("No such offer exists"));
+    public OfferDto reserveOffer(String offerName) {
+        Offer offerByName = offerRepository.findByName(offerName)
+                .orElseThrow(() -> new OfferNotFoundException("No such offer exists"));
         String username = Username.getActive();
         if(username == null) {
-            throw new AnnonymousAuthorizationException("Session expired");
+            throw new AnonymousAuthorizationException("No active user");
         }
         if(offerByName.getUserName() != null) {
             throw new OfferNotAvailableException("Offer is already taken");
         }
         offerByName.setUserName(username);
         offerRepository.save(offerByName);
+        return offerMapper.offerToOfferDto(offerByName);
     }
 
     /**

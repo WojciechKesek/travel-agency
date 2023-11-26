@@ -7,38 +7,30 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 @JsonSerializable
 public class OfferDto {
     @JsonElement
-    @NotBlank(message = "Offer name is mandatory")
     private String name;
     @JsonElement
-    @NotBlank(message = "Hotel name is mandatory")
     private String hotelName;
     @JsonElement
-    @NotBlank(message = "City name is mandatory")
     private String cityName;
-
     @JsonElement
-    @NotBlank(message = "Airport name is mandatory")
-    private String airportName;
+    private List<String> airportNames;
     @JsonElement
-    @NotBlank(message = "Country name is mandatory")
     private String countryName;
     @JsonElement
-    @NotBlank(message = "Continent name is mandatory")
     private String continentName;
     @JsonElement
-    @DecimalMax("99999.99")
-    @DecimalMin("0.00")
     private BigDecimal price;
 
-    public OfferDto(String name, String hotelName, String cityName, String airportName, String countryName, String continentName, BigDecimal price) {
+    public OfferDto(String name, String hotelName, String cityName, List<String> airportName, String countryName, String continentName, BigDecimal price) {
         this.name = name;
         this.hotelName = hotelName;
         this.cityName = cityName;
-        this.airportName = airportName;
+        this.airportNames = airportNames;
         this.countryName = countryName;
         this.continentName = continentName;
         this.price = price;
@@ -55,8 +47,8 @@ public class OfferDto {
         return hotelName;
     }
 
-    public String getAirportName() {
-        return airportName;
+    public List<String> getAirportNames() {
+        return airportNames;
     }
 
     public String getCityName() {
@@ -88,8 +80,8 @@ public class OfferDto {
         this.cityName = cityName;
     }
 
-    public void setAirportName(String airportName) {
-        this.airportName = airportName;
+    public void setAirportNames(List<String> airportNames) {
+        this.airportNames = airportNames;
     }
 
     public void setCountryName(String countryName) {

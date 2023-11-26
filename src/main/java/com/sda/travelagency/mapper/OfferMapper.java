@@ -1,6 +1,8 @@
 package com.sda.travelagency.mapper;
 
+import com.sda.travelagency.dtos.OfferAdditionDto;
 import com.sda.travelagency.dtos.OfferDto;
+import com.sda.travelagency.entities.Airport;
 import com.sda.travelagency.entities.City;
 import com.sda.travelagency.entities.Offer;
 import com.sda.travelagency.exception.HotelNotFoundException;
@@ -23,15 +25,16 @@ public class OfferMapper {
     /**
      * This method takes as a param HotelDto object.
      * It is using empty constructor to initialize Offer object and sets it required fields with data from OfferDto object
-     * To set Hotel object it uses hotelName from OfferDto to find it in HotelRepository
+     * To set Hotel object it uses hotelName and cityName from OfferDto to find it in HotelRepository
      * @param offerDto
      * @return Offer
      * @throws HotelNotFoundException "No such hotel exists"
      **/
-    public Offer offerDtoToOffer(OfferDto offerDto) {
+    public Offer offerDtoToOffer(OfferAdditionDto offerDto) {
         Offer mappedOffer = new Offer();
         mappedOffer.setName(offerDto.getName());
-        mappedOffer.setHotel(hotelRepository.findByName(offerDto.getHotelName()).orElseThrow(() -> new HotelNotFoundException("No such hotel exists")));
+        mappedOffer.setHotel(hotelRepository.findByNameAndCityName(offerDto.getHotelName(), offerDto.getCityName())
+                .orElseThrow(() -> new HotelNotFoundException("No such hotel exists")));
         mappedOffer.setPrice(offerDto.getPrice());
         return mappedOffer;
     }
@@ -47,7 +50,7 @@ public class OfferMapper {
         OfferDto offerDto = new OfferDto();
         offerDto.setName(offer.getName());
         offerDto.setHotelName(offer.getHotel().getName());
-        offerDto.setAirportName(airportRepository.findByCity(city).get(0).getName());
+        offerDto.setAirportNames(airportRepository.findByCity(city).stream().map(Airport::getName).toList());
         offerDto.setCityName(city.getName());
         offerDto.setCountryName(city.getCountry().getName());
         offerDto.setContinentName(city.getCountry().getContinent().getName());

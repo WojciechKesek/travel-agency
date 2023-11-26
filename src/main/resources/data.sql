@@ -52,20 +52,22 @@ VALUES
     ('Wroclaw', 1),
     ('Warsaw', 1);
 
-INSERT INTO hotel (name, city_id, rating)
+INSERT INTO hotel (name, address, city_id, rating)
 VALUES
-    ('Hilton', 1, 8.0),
-    ('Cubus', 2, 7.0),
-    ('Marriot', 3, 9.0);
+    ('Hilton', 'Dąbska 5', 1, 8.0),
+    ('Puro', 'Ogrodowa 10', 1, 9.0),
+    ('Qubus', 'Świętej Marii Magdaleny 2', 2, 7.0),
+    ('Marriot', 'al. Jerozolimskie 65', 3, 9.0);
 
-INSERT INTO airport (name, city_id)
+INSERT INTO airport (name, address, city_id)
 VALUES
-    ('Cracow Airport', 1),
-    ('Wroclaw Airport', 2),
-    ('Warsaw Airport', 3);
+    ('Międzynarodowy Port Lotniczy im. Jana Pawła II Kraków-Balice', 'Kapitana Mieczysława Medweckiego 1', 1),
+    ('Port Lotniczy Wrocław S.A.', 'Graniczna 190', 2),
+    ('Lotnisko Chopina', 'Żwirki i Wigury 1', 3),
+    ('Lotnisko Warszawa Modlin', 'Generała Wiktora Thommée 1a', 3);
 
 INSERT INTO offer (name, hotel_id, price)
 VALUES
-    ('Cracow_offer',1,100.0),
-    ('Wroclaw_offer',2,200.0),
-    ('Warsaw_offer',3,300.0);
+    ('Cracow_Summer_offer',1,100.0),
+    ('Wroclaw_Autumn_offer',2,200.0),
+    ('Warsaw_Summer_offer',4,300.0);

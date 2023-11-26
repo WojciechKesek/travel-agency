@@ -32,13 +32,16 @@ public class City {
     public City() {
     }
 
-
     public String getName() {
         return name;
     }
 
     public Country getCountry() {
         return country;
+    }
+
+    public List<Airport> getAirport() {
+        return airport;
     }
 
     public void setName(String name) {
