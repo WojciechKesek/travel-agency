@@ -1,6 +1,5 @@
 package com.sda.travelagency.mapper;
 
-import com.sda.travelagency.dtos.AccountCreationDto;
 import com.sda.travelagency.dtos.AccountDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,7 +1,6 @@
 package com.sda.travelagency.controller;
 
 import com.sda.travelagency.dtos.HotelDto;
-import com.sda.travelagency.entities.Hotel;
 import com.sda.travelagency.service.HotelService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

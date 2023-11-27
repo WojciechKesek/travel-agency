@@ -1,5 +1,6 @@
 package com.sda.travelagency.repository;
 
+import com.sda.travelagency.entities.City;
 import com.sda.travelagency.entities.Hotel;
 import com.sda.travelagency.entities.Offer;
 import jakarta.transaction.Transactional;
@@ -44,11 +45,12 @@ class HotelRepositoryTest {
     @Test
     public void shouldFindByCityName() {
         Offer offer = offerRepository.findAll().get(0);
+        City testCity = offer.getHotel().getCity();
 
-        Hotel hotel = new Hotel("testRepositoryHotel", offer.getHotel().getAddress(), offer.getHotel().getRating(), offer.getHotel().getCity());
+        Hotel hotel = new Hotel("testRepositoryHotel", offer.getHotel().getAddress(), offer.getHotel().getRating(), testCity);
         hotelRepository.save(hotel);
 
-        List<Hotel> result = hotelRepository.findByCityName("testRepositoryHotel");
+        List<Hotel> result = hotelRepository.findByCityName(testCity.getName());
 
         Assertions.assertThat(result.contains(hotel));
         hotelRepository.delete(hotel);
@@ -56,10 +58,11 @@ class HotelRepositoryTest {
     @Test
     public void shouldNotFindByCityName() {
         Offer offer = offerRepository.findAll().get(0);
+        City testCity = offer.getHotel().getCity();
 
-        Hotel hotel = new Hotel("testRepositoryHotel", offer.getHotel().getAddress(), offer.getHotel().getRating(), offer.getHotel().getCity());
+        Hotel hotel = new Hotel("testRepositoryHotel", offer.getHotel().getAddress(), offer.getHotel().getRating(), testCity);
 
-        List<Hotel> result = hotelRepository.findByCityName("testRepositoryHotel");
+        List<Hotel> result = hotelRepository.findByCityName(testCity.getName());
 
         Assertions.assertThat(!result.contains(hotel));
     }

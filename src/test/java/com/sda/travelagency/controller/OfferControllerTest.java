@@ -3,11 +3,9 @@ package com.sda.travelagency.controller;
 
 import com.sda.travelagency.dtos.OfferAdditionDto;
 import com.sda.travelagency.dtos.OfferDto;
-import com.sda.travelagency.entities.Airport;
 import com.sda.travelagency.entities.Hotel;
 import com.sda.travelagency.entities.Offer;
 import com.sda.travelagency.mapper.OfferMapper;
-import com.sda.travelagency.repository.AirportRepository;
 import com.sda.travelagency.repository.HotelRepository;
 import com.sda.travelagency.repository.OfferRepository;
 import org.junit.jupiter.api.Assertions;
@@ -40,6 +38,9 @@ class OfferControllerTest {
     private OfferMapper offerMapper;
 
     private final BigDecimal PRICE = BigDecimal.valueOf(100.0);
+    private final String ADMIN = "testAdmin";
+    private final String USER = "testUser";
+    private final String PASSWORD = "password";
 
     @Test
     void shouldGetAllOffers() {
@@ -48,7 +49,7 @@ class OfferControllerTest {
                 .get()
                 .uri("/offers")
                 .accept(MediaType.APPLICATION_JSON)
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testUser", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(USER, PASSWORD))
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
@@ -65,7 +66,7 @@ class OfferControllerTest {
                         ,testHotel.getName()
                         ,testHotel.getCity().getName()
                         ,PRICE))
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testAdmin", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(ADMIN, PASSWORD))
                 .exchange()
                 .expectStatus().isCreated();
     }
@@ -76,7 +77,7 @@ class OfferControllerTest {
         testClient
                 .delete()
                 .uri("/offers/{offerName}", testOffer.getName())
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testAdmin", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(ADMIN, PASSWORD))
                 .exchange()
                 .expectStatus().isOk();
     }
@@ -85,7 +86,7 @@ class OfferControllerTest {
         testClient
                 .delete()
                 .uri("/offers/{offerName}", INCORRECT_NAME)
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testAdmin", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(ADMIN, PASSWORD))
                 .exchange()
                 .expectStatus().isNotFound();
     }
@@ -99,7 +100,7 @@ class OfferControllerTest {
         testClient
                 .get()
                 .uri("/offers/{name}", testOfferDto.getName())
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testUser", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(USER, PASSWORD))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(OfferDto.class)
@@ -110,7 +111,7 @@ class OfferControllerTest {
         ProblemDetail detail = testClient
                 .get()
                 .uri("/offers/{offerName}", INCORRECT_NAME)
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testUser", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(USER, PASSWORD))
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectBody(ProblemDetail.class).returnResult().getResponseBody();
@@ -127,7 +128,7 @@ class OfferControllerTest {
                 .uri("/offers/{offerName}", updatedOfferDto.getName())
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(updatedOfferDto)
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testAdmin", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(ADMIN, PASSWORD))
                 .exchange()
                 .expectStatus().isOk();
     }
@@ -144,7 +145,7 @@ class OfferControllerTest {
                 .uri("/offers/{offerName}", INCORRECT_NAME)
                 .bodyValue(offerDto)
                 .accept(MediaType.APPLICATION_JSON)
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testAdmin", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(ADMIN, PASSWORD))
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectBody(ProblemDetail.class).returnResult().getResponseBody();
@@ -161,7 +162,7 @@ class OfferControllerTest {
                         .path("/offers/filterByHotel")
                         .queryParam("hotelName", hotel.getName())
                         .build())
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testUser", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(USER, PASSWORD))
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
@@ -175,7 +176,7 @@ class OfferControllerTest {
                         .path("/offers/filterByHotel")
                         .queryParam("hotelName", INCORRECT_NAME)
                         .build())
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testUser", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(USER, PASSWORD))
                 .exchange()
                 .expectStatus().isNotFound();
     }
@@ -185,7 +186,7 @@ class OfferControllerTest {
         testClient
                 .put()
                 .uri("/offers/reserve/{offerName}",offerName)
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testUser", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(USER, PASSWORD))
                 .exchange()
                 .expectStatus().isOk();
     }
@@ -198,7 +199,7 @@ class OfferControllerTest {
                         .queryParam("minPrice", "150")
                         .queryParam("maxPrice", "250")
                         .build())
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testUser", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(USER, PASSWORD))
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)

@@ -1,8 +1,9 @@
 package com.sda.travelagency.dtos;
 
 import com.sda.travelagency.annotation.JsonElement;
+import com.sda.travelagency.annotation.JsonSerializable;
 import jakarta.validation.constraints.NotBlank;
-
+@JsonSerializable
 public class AirportDto {
     @JsonElement
     @NotBlank(message = "Airport name is mandatory")
@@ -12,10 +13,16 @@ public class AirportDto {
     private String address;
 
     @JsonElement
-    @NotBlank(message = "Address is mandatory")
+    @NotBlank(message = "City name is mandatory")
     private String cityName;
 
     public AirportDto() {
+    }
+
+    public AirportDto(String name, String address, String cityName) {
+        this.name = name;
+        this.address = address;
+        this.cityName = cityName;
     }
 
     public String getName() {

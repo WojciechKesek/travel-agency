@@ -19,6 +19,9 @@ class AccountControllerTest {
     private WebTestClient testClient;
     @Autowired
     private UserDetailsManager userDetailsManager;
+    private final String ADMIN = "testAdmin";
+    private final String USER = "testUser";
+    private final String PASSWORD = "password";
     @Test
     void shouldCreateUser() {
         testClient
@@ -58,7 +61,7 @@ class AccountControllerTest {
                 .post()
                 .uri("/users/admin/create")
                 .bodyValue(new AccountCreationDto("newAdminByAdmin", "Test1234"))
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testAdmin", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(ADMIN, PASSWORD))
                 .exchange()
                 .expectStatus().isCreated();
     }
@@ -68,7 +71,7 @@ class AccountControllerTest {
                 .post()
                 .uri("/users/admin/create")
                 .bodyValue(new AccountCreationDto("newAdminByUser", "Test1234"))
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testUser", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(USER, PASSWORD))
                 .exchange()
                 .expectStatus().isForbidden();
     }
@@ -101,7 +104,7 @@ class AccountControllerTest {
         testClient
                 .put()
                 .uri("/users/admin/promoteToAdmin/{username}", user.getUsername())
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testAdmin", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(ADMIN, PASSWORD))
                 .exchange()
                 .expectStatus().isOk();
         user = userDetailsManager.loadUserByUsername(user.getUsername());
@@ -119,7 +122,7 @@ class AccountControllerTest {
         testClient
                 .put()
                 .uri("/users/admin/promoteToAdmin/{username}", user.getUsername())
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testUser", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(USER, PASSWORD))
                 .exchange()
                 .expectStatus().isForbidden();
         user = userDetailsManager.loadUserByUsername(user.getUsername());
@@ -138,7 +141,7 @@ class AccountControllerTest {
             testClient
                     .put()
                     .uri("/users/admin/demoteToUser/{username}", user.getUsername())
-                    .headers(headersConsumer -> headersConsumer.setBasicAuth("testAdmin", "password"))
+                    .headers(headersConsumer -> headersConsumer.setBasicAuth(ADMIN, PASSWORD))
                     .exchange()
                     .expectStatus().isOk();
             user = userDetailsManager.loadUserByUsername(user.getUsername());
@@ -156,7 +159,7 @@ class AccountControllerTest {
         testClient
                 .put()
                 .uri("/users/admin/demoteToUser/{username}", user.getUsername())
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testUser", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(USER, PASSWORD))
                 .exchange()
                 .expectStatus().isForbidden();
         user = userDetailsManager.loadUserByUsername(user.getUsername());

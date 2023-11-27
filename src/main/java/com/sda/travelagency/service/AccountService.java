@@ -30,10 +30,9 @@ public class AccountService {
      * It is using to User builder build UserDetails object with data from AccountDto. which is saved in UserDetailsManager
      * This method is strictly used to create USER role.
      * @param accountDto
-     * @return AccountDto
      * @throws UserAlreadyExistsException "This username is already taken"
      **/
-    public AccountDto createUser(AccountCreationDto accountDto){
+    public void createUser(AccountCreationDto accountDto){
         if(userDetailsManager.userExists(accountDto.getName())){
             throw new UserAlreadyExistsException("This username is already taken");
         }
@@ -44,7 +43,6 @@ public class AccountService {
                 .roles("USER")
                 .build();
         userDetailsManager.createUser(user);
-        return accountMapper.UserDetailsToAccountDto(user);
     }
     /**
      * This method takes AccountDto object as a param.
@@ -53,10 +51,9 @@ public class AccountService {
      * It is using to User builder build UserDetails object with data from AccountDto. which is saved in UserDetailsManager
      * This method is strictly used to create ADMIN user role.
      * @param accountDto
-     * @return AccountDto
      * @throws UserAlreadyExistsException "This username is already taken"
      **/
-    public AccountDto createAdmin(AccountCreationDto accountDto){
+    public void createAdmin(AccountCreationDto accountDto){
         if(userDetailsManager.userExists(accountDto.getName())){
             throw new UserAlreadyExistsException("This username is already taken");
         }
@@ -67,7 +64,6 @@ public class AccountService {
                 .roles("USER","ADMIN")
                 .build();
         userDetailsManager.createUser(admin);
-        return accountMapper.UserDetailsToAccountDto(admin);
     }
     /**
      * This method is used to delete active account.

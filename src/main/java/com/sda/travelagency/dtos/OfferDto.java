@@ -2,9 +2,6 @@ package com.sda.travelagency.dtos;
 
 import com.sda.travelagency.annotation.JsonElement;
 import com.sda.travelagency.annotation.JsonSerializable;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -25,16 +22,6 @@ public class OfferDto {
     private String continentName;
     @JsonElement
     private BigDecimal price;
-
-    public OfferDto(String name, String hotelName, String cityName, List<String> airportName, String countryName, String continentName, BigDecimal price) {
-        this.name = name;
-        this.hotelName = hotelName;
-        this.cityName = cityName;
-        this.airportNames = airportNames;
-        this.countryName = countryName;
-        this.continentName = continentName;
-        this.price = price;
-    }
 
     public OfferDto() {
     }
@@ -94,18 +81,6 @@ public class OfferDto {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    @Override
-    public String toString() {
-        return "OfferDto{" +
-                "name='" + name + '\'' +
-                ", hotelName='" + hotelName + '\'' +
-                ", cityName='" + cityName + '\'' +
-                ", countryName='" + countryName + '\'' +
-                ", continentName='" + continentName + '\'' +
-                ", price=" + price +
-                '}';
     }
 
     @Override

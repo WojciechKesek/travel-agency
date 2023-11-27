@@ -29,7 +29,7 @@ public class HotelService {
     }
     /**
      * This method finds hotels in the database.
-     * Then, it uses the HotelMapper class to transform instances of the Hotel objects into an HotelDto, which is added to List and passed on.
+     * Then, it uses the hotelMapper class to transform instances of the Hotel objects into an HotelDto, which is added to List and passed on.
      * @return List of HotelDto
      **/
     public List<HotelDto> getAllHotels(){
@@ -99,7 +99,7 @@ public class HotelService {
     }
 
     /**
-     * This method gets a Hotel as a param.
+     * This method gets a HotelDto as a param.
      * which is saved in database by HotelRepository.
      * @param hotelDto
      * @return HotelDto
