@@ -35,6 +35,9 @@ class HotelControllerTest {
     private HotelMapper hotelMapper;
     private final Float RATING = 10.0f;
     private final String ADDRESS = "testAddress";
+    private final String ADMIN = "testAdmin";
+    private final String USER = "testUser";
+    private final String PASSWORD = "password";
 
 
     @Test
@@ -43,7 +46,7 @@ class HotelControllerTest {
                 .get()
                 .uri("/hotels")
                 .accept(MediaType.APPLICATION_JSON)
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testUser", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(USER, PASSWORD))
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
@@ -57,7 +60,7 @@ class HotelControllerTest {
         testClient
                 .get()
                 .uri("/hotels/topHotels")
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testAdmin", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(ADMIN, PASSWORD))
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
@@ -74,7 +77,7 @@ class HotelControllerTest {
                         .path("/hotels/filterByCity")
                         .queryParam("cityName", cityName)
                         .build())
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testAdmin", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(ADMIN, PASSWORD))
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
@@ -88,7 +91,7 @@ class HotelControllerTest {
                 .get()
                 .uri("/hotels/{name}",testHotel.getName())
                 .accept(MediaType.APPLICATION_JSON)
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testUser", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(USER, PASSWORD))
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
@@ -102,7 +105,7 @@ class HotelControllerTest {
                 .get()
                 .uri("/hotels/incorrectHotelName")
                 .accept(MediaType.APPLICATION_JSON)
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testUser", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(USER, PASSWORD))
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectBody(ProblemDetail.class).returnResult().getResponseBody();
@@ -115,7 +118,7 @@ class HotelControllerTest {
                 .put()
                 .uri("/hotels/{name}", hotelRepository.findAll().get(0).getName())
                 .bodyValue(new HotelDto("testHotel", ADDRESS, RATING, cityRepository.findAll().get(0).getName()))
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testAdmin", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(ADMIN, PASSWORD))
                 .exchange()
                 .expectStatus().isOk();
     }
@@ -126,7 +129,7 @@ class HotelControllerTest {
                 .uri("/hotels/{name}","incorrectCityName")
                 .bodyValue(new HotelDto("testHotel", "testAddress", RATING, cityRepository.findAll().get(0).getName()))
                 .accept(MediaType.APPLICATION_JSON)
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testAdmin", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(ADMIN, PASSWORD))
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectBody(ProblemDetail.class).returnResult().getResponseBody();
@@ -138,7 +141,7 @@ class HotelControllerTest {
                 .post()
                 .uri("/hotels/addHotel")
                 .bodyValue(new HotelDto("testHotel", ADDRESS, RATING, cityRepository.findAll().get(0).getName()))
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testAdmin", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(ADMIN, PASSWORD))
                 .exchange()
                 .expectStatus().isOk();
     }
@@ -148,7 +151,7 @@ class HotelControllerTest {
                 .post()
                 .uri("/hotels/addHotel")
                 .bodyValue(new HotelDto("testHotel", ADDRESS, RATING, "incorrectCity"))
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testAdmin", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(ADMIN, PASSWORD))
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectBody(ProblemDetail.class).returnResult().getResponseBody();
@@ -162,7 +165,7 @@ class HotelControllerTest {
                 .post()
                 .uri("/hotels/addHotel")
                 .bodyValue(new HotelDto("", ADDRESS, RATING, cityRepository.findAll().get(0).getName()))
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testAdmin", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(ADMIN, PASSWORD))
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody(ProblemDetail.class).returnResult().getResponseBody();
@@ -174,7 +177,7 @@ class HotelControllerTest {
                 .post()
                 .uri("/hotels/addHotel")
                 .bodyValue(new HotelDto(null, ADDRESS, RATING, cityRepository.findAll().get(0).getName()))
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testAdmin", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(ADMIN, PASSWORD))
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody(ProblemDetail.class).returnResult().getResponseBody();
@@ -186,7 +189,7 @@ class HotelControllerTest {
                 .post()
                 .uri("/hotels/addHotel")
                 .bodyValue(new HotelDto("testHotel", ADDRESS, RATING, " "))
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testAdmin", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(ADMIN, PASSWORD))
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody(ProblemDetail.class).returnResult().getResponseBody();
@@ -198,7 +201,7 @@ class HotelControllerTest {
                 .post()
                 .uri("/hotels/addHotel")
                 .bodyValue(new HotelDto("testHotel", ADDRESS, RATING, null))
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testAdmin", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(ADMIN, PASSWORD))
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody(ProblemDetail.class).returnResult().getResponseBody();
@@ -210,7 +213,7 @@ class HotelControllerTest {
         ProblemDetail detail = testClient
                 .delete()
                 .uri("/hotels/{name}", hotelRepository.findAll().get(0).getName())
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testAdmin", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(ADMIN, PASSWORD))
                 .exchange()
                 .expectStatus().is4xxClientError()
                 .expectBody(ProblemDetail.class).returnResult().getResponseBody();
@@ -225,7 +228,7 @@ class HotelControllerTest {
         testClient
                 .delete()
                 .uri("/hotels/{name}",hotelToDelete.getName())
-                .headers(headersConsumer -> headersConsumer.setBasicAuth("testAdmin", "password"))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(ADMIN, PASSWORD))
                 .exchange()
                 .expectStatus().isOk();
         Assertions.assertFalse(hotelRepository.findAll().contains(hotelToDelete));

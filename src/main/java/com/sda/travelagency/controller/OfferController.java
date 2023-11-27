@@ -2,7 +2,6 @@ package com.sda.travelagency.controller;
 
 import com.sda.travelagency.dtos.OfferAdditionDto;
 import com.sda.travelagency.dtos.OfferDto;
-import com.sda.travelagency.entities.Offer;
 import com.sda.travelagency.service.OfferService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

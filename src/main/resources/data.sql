@@ -69,5 +69,5 @@ VALUES
 INSERT INTO offer (name, hotel_id, price)
 VALUES
     ('Cracow_Summer_offer',1,100.0),
-    ('Wroclaw_Autumn_offer',2,200.0),
+    ('Wroclaw_Autumn_offer',3,200.0),
     ('Warsaw_Summer_offer',4,300.0);

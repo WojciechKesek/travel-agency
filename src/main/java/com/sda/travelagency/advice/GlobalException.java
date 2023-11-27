@@ -51,4 +51,9 @@ public class GlobalException {
     public ProblemDetail handleAnonymousAuthorizationException(AnonymousAuthorizationException e){
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
     }
+
+    @ExceptionHandler(AirportNotFoundException.class)
+    public ProblemDetail handleAirportNotFoundException(AirportNotFoundException e){
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+    }
 }
