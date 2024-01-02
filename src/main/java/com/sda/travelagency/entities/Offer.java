@@ -1,5 +1,6 @@
 package com.sda.travelagency.entities;
 
+import com.sda.travelagency.exception.OfferSoldOutException;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -14,16 +15,19 @@ public class Offer {
 
     private BigDecimal price;
 
-    private String userName;
+    private int userId;
+
+    private int quantity;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
 
 
-    public Offer(String name, BigDecimal price, Hotel hotel) {
+    public Offer(String name, BigDecimal price, int quantity, Hotel hotel) {
         this.name = name;
         this.price = price;
+        this.quantity = quantity;
         this.hotel = hotel;
     }
 
@@ -57,6 +61,18 @@ public class Offer {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public void reserve(){
+        if(quantity > 0){
+            quantity--;
+        } else {
+            throw new OfferSoldOutException("Offer sold out");
+        }
+
+    }
+    public void release(){
+            quantity++;
     }
 
 }

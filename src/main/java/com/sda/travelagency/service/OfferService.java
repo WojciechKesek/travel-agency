@@ -12,6 +12,7 @@ import com.sda.travelagency.repository.HotelRepository;
 import com.sda.travelagency.repository.OfferRepository;
 import com.sda.travelagency.util.Username;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -118,6 +119,7 @@ public class OfferService {
             throw new OfferNotAvailableException("Offer is already taken");
         }
         offerByName.setUserName(username);
+        offerByName.reserve();
         offerRepository.save(offerByName);
         return offerMapper.offerToOfferDto(offerByName);
     }

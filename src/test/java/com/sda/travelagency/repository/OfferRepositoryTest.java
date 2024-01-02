@@ -26,7 +26,7 @@ class OfferRepositoryTest {
     public void shouldFindByName() {
 
 
-        Offer offer = new Offer("testOffer", BigDecimal.valueOf(100),hotelRepository.findAll().get(0));
+        Offer offer = new Offer("testOffer", BigDecimal.valueOf(100), count, hotelRepository.findAll().get(0));
         offerRepository.save(offer);
 
         Optional<Offer> result = offerRepository.findByName("testOffer");
@@ -45,7 +45,7 @@ class OfferRepositoryTest {
     @Test
     public void shouldFindOffersByHotel() {
         Hotel hotel = hotelRepository.findAll().get(0);
-        Offer offer = new Offer("testOffer", BigDecimal.valueOf(100),hotel);
+        Offer offer = new Offer("testOffer", BigDecimal.valueOf(100), count, hotel);
         offerRepository.save(offer);
 
         List<Offer> result = offerRepository.findOffersByHotelName(hotel.getName());
@@ -55,7 +55,7 @@ class OfferRepositoryTest {
     @Test
     public void shouldNotFindByCityName() {
         Hotel hotel = hotelRepository.findAll().get(0);
-        Offer offer = new Offer("testOffer", BigDecimal.valueOf(100),hotel);
+        Offer offer = new Offer("testOffer", BigDecimal.valueOf(100), count, hotel);
 
         List<Offer> result = offerRepository.findOffersByHotelName(hotel.getName());
 
@@ -65,9 +65,9 @@ class OfferRepositoryTest {
     @Test
     public void shouldFindByPriceGreaterThanAndPriceLessThanOrderByPriceDesc() {
         Hotel hotel = hotelRepository.findAll().get(0);
-        Offer offerInRangeIndex0 = new Offer("offerInRangeIndex0", BigDecimal.valueOf(1200),hotel);
-        Offer offerInRangeIndex1 = new Offer("offerInRangeIndex1", BigDecimal.valueOf(1000),hotel);
-        Offer offerOutsideRange = new Offer("offerOutsideRange", BigDecimal.valueOf(2000),hotel);
+        Offer offerInRangeIndex0 = new Offer("offerInRangeIndex0", BigDecimal.valueOf(1200), count, hotel);
+        Offer offerInRangeIndex1 = new Offer("offerInRangeIndex1", BigDecimal.valueOf(1000), count, hotel);
+        Offer offerOutsideRange = new Offer("offerOutsideRange", BigDecimal.valueOf(2000), count, hotel);
         offerRepository.save(offerInRangeIndex0);
         offerRepository.save(offerInRangeIndex1);
         offerRepository.save(offerOutsideRange);
