@@ -1,9 +1,9 @@
 package com.sda.travelagency.entities;
 
-import com.sda.travelagency.exception.OfferSoldOutException;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 public class Offer {
@@ -14,8 +14,9 @@ public class Offer {
     private String name;
 
     private BigDecimal price;
-
-    private int userId;
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private List<User> users;
 
     private int quantity;
 
@@ -35,7 +36,6 @@ public class Offer {
     }
 
 
-    public String getUserName() {return userName; }
     public String getName() {
         return name;
     }
@@ -47,8 +47,12 @@ public class Offer {
         return price;
     }
 
-    public void setUserName(String username) {
-        this.userName = username;
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 
     public void setName(String name) {
@@ -63,16 +67,8 @@ public class Offer {
         this.price = price;
     }
 
-    public void reserve(){
-        if(quantity > 0){
-            quantity--;
-        } else {
-            throw new OfferSoldOutException("Offer sold out");
-        }
+    public void reserve(User user){
+    }
 
-    }
-    public void release(){
-            quantity++;
-    }
 
 }

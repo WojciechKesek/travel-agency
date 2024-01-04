@@ -106,7 +106,7 @@ public class OfferService {
      * @return OfferDto
      * @throws OfferNotFoundException "No such offer exists"
      * @throws AnonymousAuthorizationException "Session expired"
-     * @throws OfferNotAvailableException "Offer is already taken"
+     * @throws OfferNotAvailableException "Offer is already sold out"
      **/
     public OfferDto reserveOffer(String offerName) {
         Offer offerByName = offerRepository.findByName(offerName)
@@ -115,11 +115,10 @@ public class OfferService {
         if(username == null) {
             throw new AnonymousAuthorizationException("No active user");
         }
-        if(offerByName.getUserName() != null) {
-            throw new OfferNotAvailableException("Offer is already taken");
+        if(offerByName.getUsers().size() >= offerByName.getQuantity()) {
+            throw new OfferNotAvailableException("Offer is already sold out");
         }
-        offerByName.setUserName(username);
-        offerByName.reserve();
+//        offerByName.getUsers().add();
         offerRepository.save(offerByName);
         return offerMapper.offerToOfferDto(offerByName);
     }
