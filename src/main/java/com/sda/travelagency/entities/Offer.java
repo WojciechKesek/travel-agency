@@ -14,8 +14,7 @@ public class Offer {
     private String name;
 
     private BigDecimal price;
-    @OneToMany
-    @JoinColumn(name = "user_id")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "offers")
     private List<User> users;
 
     private int quantity;
@@ -66,9 +65,5 @@ public class Offer {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
-
-    public void reserve(User user){
-    }
-
 
 }

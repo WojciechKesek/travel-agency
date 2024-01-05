@@ -66,8 +66,8 @@ VALUES
     ('Lotnisko Chopina', 'Żwirki i Wigury 1', 3),
     ('Lotnisko Warszawa Modlin', 'Generała Wiktora Thommée 1a', 3);
 
-INSERT INTO offer (name, hotel_id, price)
+INSERT INTO offer (name, hotel_id, price, quantity)
 VALUES
-    ('Cracow_Summer_offer',1,100.0),
-    ('Wroclaw_Autumn_offer',3,200.0),
-    ('Warsaw_Summer_offer',4,300.0);
+    ('Cracow_Summer_offer',1,100.0,3),
+    ('Wroclaw_Autumn_offer',3,200.0,2),
+    ('Warsaw_Summer_offer',4,300.0,1);

@@ -1,3 +1,14 @@
+DROP TABLE IF EXISTS user_offers;
+DROP TABLE IF EXISTS offer;
+DROP TABLE IF EXISTS hotel;
+DROP TABLE IF EXISTS airport;
+DROP TABLE IF EXISTS city;
+DROP TABLE IF EXISTS country;
+DROP TABLE IF EXISTS continent;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS authorities;
+
+
 CREATE TABLE IF NOT EXISTS continent (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255)
@@ -38,12 +49,11 @@ CREATE TABLE IF NOT EXISTS offer (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255),
     hotel_id INT,
-    price DECIMAL,
-    user_name VARCHAR(255),
+    price DECIMAL(10,2),
+    quantity INT,
     CONSTRAINT FK_hotel_id FOREIGN KEY (hotel_id) REFERENCES hotel(id)
 );
 
-DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
     id INT NOT NULL AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL,
@@ -52,11 +62,19 @@ CREATE TABLE IF NOT EXISTS users (
     PRIMARY KEY(id)
     );
 
-DROP TABLE IF EXISTS authorities;
 CREATE TABLE IF NOT EXISTS authorities (
     id INT NOT NULL AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL,
     authority VARCHAR(50) NOT NULL,
     PRIMARY KEY(id)
     );
+
+
+CREATE TABLE IF NOT EXISTS user_offers (
+    user_id INT,
+    offer_id INT,
+    CONSTRAINT FK_offer_id FOREIGN KEY (offer_id) REFERENCES offer(id),
+    CONSTRAINT FK_user_id FOREIGN KEY (user_id) REFERENCES users(id),
+    PRIMARY KEY (user_id, offer_id)
+);
 

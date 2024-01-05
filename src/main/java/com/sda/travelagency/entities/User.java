@@ -6,9 +6,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
+@Table(name = "users")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,14 +20,22 @@ public class User implements UserDetails {
     private String password;
     private boolean enabled;
 
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    private Set<Authority> roles= new HashSet<>();
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinTable(
+            name = "user_offers",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "offer_id"))
+    private List<Offer> offers;
+
+
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private Set<Authority> authorities = new HashSet<>();
 
     public User(String username, String password, boolean enabled, Set<Authority> roles) {
         this.username = username;
         this.password = password;
         this.enabled = enabled;
-        this.roles = roles;
+        this.authorities = roles;
     }
 
     public User() {
@@ -33,7 +43,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles;
+        return this.authorities;
     }
 
     @Override
@@ -66,7 +76,7 @@ public class User implements UserDetails {
         return enabled;
     }
 
-    public Set<Authority> getRoles() {
-        return roles;
+    public List<Offer> getOffers() {
+        return offers;
     }
 }
