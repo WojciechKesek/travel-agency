@@ -31,11 +31,11 @@ public class User implements UserDetails {
     @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Set<Authority> authorities = new HashSet<>();
 
-    public User(String username, String password, boolean enabled, Set<Authority> roles) {
+    public User(String username, String password, boolean enabled, Set<Authority> authorities) {
         this.username = username;
         this.password = password;
         this.enabled = enabled;
-        this.authorities = roles;
+        this.authorities = authorities;
     }
 
     public User() {

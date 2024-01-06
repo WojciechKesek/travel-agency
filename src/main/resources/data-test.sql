@@ -65,8 +65,16 @@ VALUES
     ('Wroclaw Airport', 'test', 2),
     ('Warsaw Airport', 'test', 3);
 
-INSERT INTO offer (name, hotel_id, price)
+INSERT INTO offer (name, hotel_id, price, quantity)
 VALUES
-    ('Cracow_offer',1,100.0),
-    ('Wroclaw_offer',2,100.0),
-    ('Warsaw_offer',3,100.0);
+    ('Cracow_offer',1,100.0,3),
+    ('Wroclaw_offer',2,100.0,2),
+    ('Warsaw_offer',3,100.0,1);
+
+INSERT INTO users (username, password, enabled)
+VALUES
+    ('testUser','password',1);
+
+INSERT INTO authorities (username, authority)
+VALUES
+    ('testUser','ROLE_USER');

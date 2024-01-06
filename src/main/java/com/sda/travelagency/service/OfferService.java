@@ -115,7 +115,8 @@ public class OfferService {
         if(offerByName.getUsers().size() >= offerByName.getQuantity()) {
             throw new OfferNotAvailableException("Offer is already sold out");
         }
-        User currentUser = userRepository.findByUsername(Username.getActive());
+        User currentUser = userRepository.findByUsername(Username.getActive())
+                .orElseThrow(() -> new AnonymousAuthorizationException("No user logged in"));
         if(offerByName.getUsers().contains(currentUser)){
             throw new OfferAlreadyReservedException("User already reserved this offer");
         }
