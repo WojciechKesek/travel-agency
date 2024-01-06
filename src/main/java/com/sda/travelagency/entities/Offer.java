@@ -3,6 +3,7 @@ package com.sda.travelagency.entities;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 public class Offer {
@@ -13,17 +14,20 @@ public class Offer {
     private String name;
 
     private BigDecimal price;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "offers")
+    private List<User> users;
 
-    private String userName;
+    private int quantity;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
 
 
-    public Offer(String name, BigDecimal price, Hotel hotel) {
+    public Offer(String name, BigDecimal price, int quantity, Hotel hotel) {
         this.name = name;
         this.price = price;
+        this.quantity = quantity;
         this.hotel = hotel;
     }
 
@@ -31,7 +35,6 @@ public class Offer {
     }
 
 
-    public String getUserName() {return userName; }
     public String getName() {
         return name;
     }
@@ -43,8 +46,12 @@ public class Offer {
         return price;
     }
 
-    public void setUserName(String username) {
-        this.userName = username;
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 
     public void setName(String name) {

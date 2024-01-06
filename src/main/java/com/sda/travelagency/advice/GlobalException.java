@@ -56,4 +56,8 @@ public class GlobalException {
     public ProblemDetail handleAirportNotFoundException(AirportNotFoundException e){
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
     }
+    @ExceptionHandler(OfferAlreadyReservedException.class)
+    public ProblemDetail handleAOfferAlreadyReservedException(OfferAlreadyReservedException e){
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
 }

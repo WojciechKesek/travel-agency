@@ -19,7 +19,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.math.BigDecimal;
 
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 class OfferControllerTest {
@@ -37,6 +36,7 @@ class OfferControllerTest {
     @Autowired
     private OfferMapper offerMapper;
 
+
     private final BigDecimal PRICE = BigDecimal.valueOf(100.0);
     private final String ADMIN = "testAdmin";
     private final String USER = "testUser";
@@ -44,7 +44,6 @@ class OfferControllerTest {
 
     @Test
     void shouldGetAllOffers() {
-
         testClient
                 .get()
                 .uri("/offers")
@@ -74,6 +73,7 @@ class OfferControllerTest {
     @Test
     void shouldDeleteOffer() {
         Offer testOffer = offerRepository.findAll().get(0);
+
         testClient
                 .delete()
                 .uri("/offers/{offerName}", testOffer.getName())
@@ -180,16 +180,18 @@ class OfferControllerTest {
                 .exchange()
                 .expectStatus().isNotFound();
     }
-    @Test
-    void shouldReserveOffer(){
-        String offerName = offerRepository.findAll().get(0).getName();
-        testClient
-                .put()
-                .uri("/offers/reserve/{offerName}",offerName)
-                .headers(headersConsumer -> headersConsumer.setBasicAuth(USER, PASSWORD))
-                .exchange()
-                .expectStatus().isOk();
-    }
+
+@Test
+void shouldReserveOffer() {
+    String offerName = "Cracow_offer";
+
+    testClient
+            .put()
+            .uri("/offers/reserve/{offerName}", offerName)
+            .headers(headersConsumer -> headersConsumer.setBasicAuth(USER, PASSWORD))
+            .exchange()
+            .expectStatus().isOk();
+}
     @Test
     void shouldGetOffersByPrice(){
         testClient

@@ -3,15 +3,15 @@ package com.sda.travelagency.service;
 import com.sda.travelagency.dtos.OfferAdditionDto;
 import com.sda.travelagency.dtos.OfferDto;
 import com.sda.travelagency.entities.Offer;
-import com.sda.travelagency.exception.AnonymousAuthorizationException;
-import com.sda.travelagency.exception.HotelNotFoundException;
-import com.sda.travelagency.exception.OfferNotAvailableException;
-import com.sda.travelagency.exception.OfferNotFoundException;
+import com.sda.travelagency.entities.User;
+import com.sda.travelagency.exception.*;
 import com.sda.travelagency.mapper.OfferMapper;
 import com.sda.travelagency.repository.HotelRepository;
 import com.sda.travelagency.repository.OfferRepository;
+import com.sda.travelagency.repository.UserRepository;
 import com.sda.travelagency.util.Username;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -22,13 +22,14 @@ public class OfferService {
 
     private final OfferMapper offerMapper;
     private final OfferRepository offerRepository;
-
     private final HotelRepository hotelRepository;
+    private final UserRepository userRepository;
 
-    public OfferService(OfferMapper offerMapper, OfferRepository offerRepository, HotelRepository hotelRepository) {
+    public OfferService(OfferMapper offerMapper, OfferRepository offerRepository, HotelRepository hotelRepository, UserRepository userRepository) {
         this.offerMapper = offerMapper;
         this.offerRepository = offerRepository;
         this.hotelRepository = hotelRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -105,19 +106,23 @@ public class OfferService {
      * @return OfferDto
      * @throws OfferNotFoundException "No such offer exists"
      * @throws AnonymousAuthorizationException "Session expired"
-     * @throws OfferNotAvailableException "Offer is already taken"
+     * @throws OfferNotAvailableException "Offer is already sold out"
      **/
+    @Transactional
     public OfferDto reserveOffer(String offerName) {
         Offer offerByName = offerRepository.findByName(offerName)
                 .orElseThrow(() -> new OfferNotFoundException("No such offer exists"));
-        String username = Username.getActive();
-        if(username == null) {
-            throw new AnonymousAuthorizationException("No active user");
+        if(offerByName.getUsers().size() >= offerByName.getQuantity()) {
+            throw new OfferNotAvailableException("Offer is already sold out");
         }
-        if(offerByName.getUserName() != null) {
-            throw new OfferNotAvailableException("Offer is already taken");
+        User currentUser = userRepository.findByUsername(Username.getActive())
+                .orElseThrow(() -> new AnonymousAuthorizationException("No user logged in"));
+        if(offerByName.getUsers().contains(currentUser)){
+            throw new OfferAlreadyReservedException("User already reserved this offer");
         }
-        offerByName.setUserName(username);
+        offerByName.getUsers().add(currentUser);
+        currentUser.getOffers().add(offerByName);
+        userRepository.save(currentUser);
         offerRepository.save(offerByName);
         return offerMapper.offerToOfferDto(offerByName);
     }
