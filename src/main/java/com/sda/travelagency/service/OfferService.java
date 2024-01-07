@@ -167,7 +167,6 @@ public class OfferService {
      * Next, it uses the OfferMapper class to transform instances of the Offer objects into an OfferDto,
      * which is added to List and passed on.
      * @return List of OfferDto
-     * @throws HotelNotFoundException "No such hotel exists"
      **/
     public List<OfferDto> getOffersForLoggedUser(){
         return offerRepository.findOffersByUsers_username(Username.getActive())
