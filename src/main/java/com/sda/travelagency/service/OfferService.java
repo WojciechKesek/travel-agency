@@ -161,4 +161,11 @@ public class OfferService {
                 .map(offerMapper::offerToOfferDto)
                 .toList();
     }
+
+    public List<OfferDto> getOffersForLoggedUser(){
+        return offerRepository.findOffersByUsers_username(Username.getActive())
+                .stream()
+                .map(offerMapper::offerToOfferDto)
+                .toList();
+    }
 }

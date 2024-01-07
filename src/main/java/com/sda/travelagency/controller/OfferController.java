@@ -68,4 +68,10 @@ public class OfferController {
         OfferDto offerDto = offerService.reserveOffer(offerName);
         return new ResponseEntity<>(offerDto, HttpStatus.OK);
     }
+
+    @Secured("ROLE_USER")
+    @GetMapping("/myOffers")
+    List<OfferDto> getOffersForLoggedUser(){
+        return offerService.getOffersForLoggedUser();
+    }
 }
