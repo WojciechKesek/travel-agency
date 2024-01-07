@@ -14,4 +14,6 @@ public interface OfferRepository extends JpaRepository<Offer, Integer> {
     List<Offer> findOffersByHotelName(String hotelName);
     List<Offer> findByPriceGreaterThanAndPriceLessThanOrderByPriceDesc(BigDecimal minPrice, BigDecimal maxPrice);
 
+    List<Offer> findOffersByUsers_username(String username);
+
 }
