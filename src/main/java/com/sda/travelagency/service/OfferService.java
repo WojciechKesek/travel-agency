@@ -161,7 +161,14 @@ public class OfferService {
                 .map(offerMapper::offerToOfferDto)
                 .toList();
     }
-
+    /**
+     * This method gets an offers which was reserved by logged user.
+     * It uses the offerRepository class to find Offer objects which was reserved by user in database.
+     * Next, it uses the OfferMapper class to transform instances of the Offer objects into an OfferDto,
+     * which is added to List and passed on.
+     * @return List of OfferDto
+     * @throws HotelNotFoundException "No such hotel exists"
+     **/
     public List<OfferDto> getOffersForLoggedUser(){
         return offerRepository.findOffersByUsers_username(Username.getActive())
                 .stream()

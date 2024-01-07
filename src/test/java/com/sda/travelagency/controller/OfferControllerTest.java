@@ -207,4 +207,17 @@ void shouldReserveOffer() {
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBodyList(OfferDto.class);
     }
+
+    @Test
+    void shouldGetOffersForLoggedUser() {
+        testClient
+                .get()
+                .uri("/offers")
+                .accept(MediaType.APPLICATION_JSON)
+                .headers(headersConsumer -> headersConsumer.setBasicAuth(USER, PASSWORD))
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBodyList(OfferDto.class);
+    }
 }
