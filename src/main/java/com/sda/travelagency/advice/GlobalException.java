@@ -60,4 +60,8 @@ public class GlobalException {
     public ProblemDetail handleAOfferAlreadyReservedException(OfferAlreadyReservedException e){
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
     }
+    @ExceptionHandler(OfferWasntReservedByCurrentUserException.class)
+    public ProblemDetail handleOfferWasntReservedByCurrentUserException(OfferWasntReservedByCurrentUserException e){
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
 }
