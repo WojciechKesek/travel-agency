@@ -78,3 +78,7 @@ VALUES
 INSERT INTO authorities (username, authority)
 VALUES
     ('testUser','ROLE_USER');
+
+INSERT INTO user_offers (user_id, offer_id)
+VALUES
+    (1,2);

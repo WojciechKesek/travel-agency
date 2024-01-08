@@ -74,4 +74,10 @@ public class OfferController {
     List<OfferDto> getOffersForLoggedUser(){
         return offerService.getOffersForLoggedUser();
     }
+    @Secured("ROLE_USER")
+    @PutMapping("/release/{offerName}")
+    ResponseEntity<OfferDto> releaseOffer(@PathVariable String offerName) throws RuntimeException{
+        OfferDto offerDto = offerService.releaseOffer(offerName);
+        return new ResponseEntity<>(offerDto, HttpStatus.OK);
+    }
 }

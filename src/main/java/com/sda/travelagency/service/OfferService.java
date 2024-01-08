@@ -101,11 +101,11 @@ public class OfferService {
     /**
      * This method gets an offerName as a param.
      * Then, it uses the OfferRepository class to find Offer object in database or else throws OfferNotFoundException,
-     * If present it changes username parameter in Offer object from null to active user and save it in database.
+     * If present it adds user to offer list of users and offer to user list of offers and saves it in database.
      * @param offerName
      * @return OfferDto
      * @throws OfferNotFoundException "No such offer exists"
-     * @throws AnonymousAuthorizationException "Session expired"
+     * @throws AnonymousAuthorizationException "No user logged in"
      * @throws OfferNotAvailableException "Offer is already sold out"
      **/
     @Transactional
@@ -173,5 +173,32 @@ public class OfferService {
                 .stream()
                 .map(offerMapper::offerToOfferDto)
                 .toList();
+    }
+
+    /**
+     * This method gets an offerName as a param.
+     * Then, it uses the OfferRepository class to find Offer object in database or else throws OfferNotFoundException,
+     * Next, it gets currently logged user.
+     * If present it removes user from offer list of users and removes offer from user list of offers and saves it in database.
+     * @param offerName
+     * @return OfferDto
+     * @throws OfferNotFoundException "No such offer exists"
+     * @throws AnonymousAuthorizationException "No user logged in"
+     * @throws OfferWasntReservedByCurrentUserException "Offer wasn't reserved"
+     **/
+    @Transactional
+    public OfferDto releaseOffer(String offerName){
+        Offer offerToRelease = offerRepository.findByName(offerName)
+                .orElseThrow(() -> new OfferNotFoundException("No such offer exists"));
+        User currentUser = userRepository.findByUsername(Username.getActive())
+                .orElseThrow(() -> new AnonymousAuthorizationException("No user logged in"));
+        if(!currentUser.getOffers().contains(offerToRelease)){
+            throw new OfferWasntReservedByCurrentUserException("Offer wasn't reserved");
+        }
+        offerToRelease.getUsers().remove(currentUser);
+        currentUser.getOffers().remove(offerToRelease);
+        userRepository.save(currentUser);
+        offerRepository.save(offerToRelease);
+        return offerMapper.offerToOfferDto(offerToRelease);
     }
 }

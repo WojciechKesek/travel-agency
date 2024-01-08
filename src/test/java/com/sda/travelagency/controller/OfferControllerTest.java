@@ -181,9 +181,9 @@ class OfferControllerTest {
                 .expectStatus().isNotFound();
     }
 
-@Test
-void shouldReserveOffer() {
-    String offerName = "Cracow_offer";
+    @Test
+    void shouldReserveOffer() {
+    String offerName = "Warsaw_offer";
 
     testClient
             .put()
@@ -219,5 +219,14 @@ void shouldReserveOffer() {
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBodyList(OfferDto.class);
+    }
+    @Test
+    void shouldReleaseOffer(){
+        testClient
+                .put()
+                .uri("/offers/release/{offerName}","Wroclaw_offer")
+                .headers(headerConsumer -> headerConsumer.setBasicAuth(USER,PASSWORD))
+                .exchange()
+                .expectStatus().isOk();
     }
 }
