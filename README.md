@@ -1,53 +1,113 @@
 # ✈️ Travel Agency
 
-A travel agency application designed to support the management of travel offers and provide a foundation for handling customers, reservations and travel-related operations.
+A **Java Spring Boot REST API** for managing travel offers, customers and reservations.
 
-The project is developed as a web application and is intended to provide a clean separation between the application's presentation, business and data-access layers.
+The project was developed as a backend application with a layered architecture, focusing on **clean separation of responsibilities, persistence, validation, error handling and maintainable code**.
 
----
+## 🎯 Project Overview
 
-## 📌 Features
+The application provides backend functionality for a travel agency, including:
 
-The application is designed around the following travel-agency use cases:
-
-* browsing available travel offers,
-* managing travel destinations and offers,
+* managing travel offers and destinations,
 * managing customer data,
 * creating and managing reservations,
-* retrieving travel information through the application API,
-* persistent storage of application data,
-* validation and error handling.
+* exposing functionality through REST APIs,
+* persisting application data in a relational database,
+* request validation and error handling.
 
-> The exact functionality depends on the current implementation of the project.
+The project demonstrates practical use of **Java, Spring Boot, Spring Data JPA and REST API development**.
 
----
+## 👨‍💻 My Contribution
+
+I developed the application and its backend functionality, including:
+
+* implementing REST API endpoints,
+* developing business logic and service-layer functionality,
+* designing and implementing the persistence layer,
+* working with Spring Data JPA and Hibernate,
+* implementing validation and error handling,
+* working with relational database persistence,
+* writing and maintaining automated tests,
+* structuring the application using separation of concerns and layered architecture.
+
+The repository contains my development work and commits.
+
+## 🏗️ Architecture
+
+The application follows a layered architecture:
+
+```text
+                 HTTP Request
+                      │
+                      ▼
+               ┌─────────────┐
+               │ Controller  │
+               └──────┬──────┘
+                      │
+                      ▼
+               ┌─────────────┐
+               │   Service   │
+               └──────┬──────┘
+                      │
+                      ▼
+               ┌─────────────┐
+               │ Repository  │
+               └──────┬──────┘
+                      │
+                      ▼
+               ┌─────────────┐
+               │  Database   │
+               └─────────────┘
+```
+
+### Main layers
+
+| Layer        | Responsibility                     |
+| ------------ | ---------------------------------- |
+| `controller` | REST API and HTTP request handling |
+| `service`    | Business logic                     |
+| `repository` | Data access                        |
+| `entity`     | Domain/database entities           |
+| `dto`        | Data transfer objects              |
+| `config`     | Application configuration          |
+| `test`       | Automated tests                    |
+
+This structure keeps API, business logic and persistence responsibilities separated and makes the application easier to test and maintain.
 
 ## 🛠️ Technology Stack
 
-The project uses a backend/web application architecture.
+### Backend
 
-Typical technologies used by the project include:
+* **Java**
+* **Spring Boot**
+* **Spring Web**
+* **Spring Data JPA**
+* **Hibernate**
+* **REST API**
 
-* Java
-* Spring Boot
-* Spring Web
-* Spring Data / JPA
-* Maven
-* relational database
-* REST API
+### Database
 
----
+* **PostgreSQL**
+* **SQL**
+
+### Build & Development
+
+* **Maven**
+* **Git**
+
+### Testing
+
+* **JUnit**
+* automated unit/integration tests
 
 ## 📋 Requirements
 
-Before running the project locally, make sure you have the required development tools installed.
+Before running the project, make sure you have:
 
-### Required
-
-* **JDK 25** or the Java version configured by the project
+* **JDK 25** or the Java version configured in the project
 * **Maven 3.9+**
-* **PostgreSQL** or the database configured by the application
-* Git
+* **PostgreSQL**
+* **Git**
 
 Verify your installation:
 
@@ -57,9 +117,7 @@ mvn -version
 git --version
 ```
 
----
-
-## 🚀 Installation
+## 🚀 Running the Application
 
 ### 1. Clone the repository
 
@@ -68,15 +126,9 @@ git clone https://github.com/WojciechKesek/travel-agency.git
 cd travel-agency
 ```
 
-### 2. Build the project
+### 2. Configure the database
 
-```bash
-mvn clean install
-```
-
-### 3. Configure the application
-
-Create or update the local application configuration with the required database and application settings.
+Create a PostgreSQL database and configure the connection in the application's configuration.
 
 Example:
 
@@ -84,91 +136,77 @@ Example:
 spring.datasource.url=jdbc:postgresql://localhost:5432/travel_agency
 spring.datasource.username=travel_agency
 spring.datasource.password=your_password
-
-spring.jpa.hibernate.ddl-auto=update
 ```
 
-Do not commit passwords, API keys or other secrets to the repository.
+Keep credentials outside the repository and do not commit sensitive information.
 
----
+### 3. Build the application
 
-## ▶️ Running the Application
+```bash
+mvn clean install
+```
 
-Run the application using Maven:
+### 4. Run the application
 
 ```bash
 mvn spring-boot:run
 ```
 
-Alternatively, build the application and run the generated JAR:
+Alternatively:
 
 ```bash
 mvn clean package
 java -jar target/*.jar
 ```
 
-By default, Spring Boot applications run on:
+The application runs on the configured Spring Boot port, typically:
 
 ```text
 http://localhost:8080
 ```
 
-If another port is configured in the application, use that port instead.
+## 🗄️ Database
 
----
+The application uses a relational database for persistent storage.
 
-## 🗄️ Database Configuration
-
-The application requires a relational database for persistent storage.
-
-### PostgreSQL example
-
-Create the database:
+Example PostgreSQL setup:
 
 ```sql
 CREATE DATABASE travel_agency;
 ```
 
-Create a dedicated database user:
+Configure the database connection using the application's local configuration.
 
-```sql
-CREATE USER travel_agency WITH PASSWORD 'your_password';
-```
+For local development, credentials should be supplied through configuration or environment variables rather than committed to source control.
 
-Grant permissions:
+## 🔌 REST API
 
-```sql
-GRANT ALL PRIVILEGES ON DATABASE travel_agency
-TO travel_agency;
-```
+The application exposes its functionality through REST endpoints related to the main domain objects, including:
 
-Configure the connection in `application.properties` or `application.yml`.
+* travel offers,
+* destinations,
+* customers,
+* reservations.
 
-Example:
+The exact endpoints and request/response models are defined by the controllers implemented in the project.
 
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/travel_agency
-spring.datasource.username=travel_agency
-spring.datasource.password=your_password
-```
+## 🧪 Testing
 
-### Environment variables
-
-For local and production environments, it is recommended to keep credentials outside the source code.
-
-Example:
+Run the complete test suite:
 
 ```bash
-export DB_URL=jdbc:postgresql://localhost:5432/travel_agency
-export DB_USERNAME=travel_agency
-export DB_PASSWORD=your_password
+mvn test
 ```
 
----
+Or:
+
+```bash
+mvn clean test
+```
+
+The test suite covers application functionality such as business logic and API behaviour implemented in the project.
 
 ## 📁 Project Structure
-
-A typical structure of the application is:
 
 ```text
 travel-agency/
@@ -176,300 +214,41 @@ travel-agency/
 │   ├── main/
 │   │   ├── java/
 │   │   │   └── ...
-│   │   │       ├── controller/
-│   │   │       ├── service/
-│   │   │       ├── repository/
-│   │   │       ├── entity/
-│   │   │       ├── dto/
-│   │   │       └── config/
-│   │   │
 │   │   └── resources/
-│   │       ├── application.properties
 │   │       └── ...
 │   │
 │   └── test/
 │       └── java/
-│           └── ...
 │
 ├── pom.xml
 ├── .gitignore
 └── README.md
 ```
 
-### Main layers
+## 💡 Engineering Practices
 
-| Layer        | Responsibility                     |
-| ------------ | ---------------------------------- |
-| `controller` | REST API and HTTP request handling |
-| `service`    | Business logic                     |
-| `repository` | Database access                    |
-| `entity`     | Database/domain entities           |
-| `dto`        | Data transfer objects              |
-| `config`     | Application configuration          |
-| `test`       | Automated tests                    |
+The project focuses on several backend development principles:
 
----
-
-## 🔌 API
-
-The application exposes functionality through HTTP endpoints.
-
-The API is organized around the application's main domain objects, such as:
-
-* travel offers,
-* destinations,
-* customers,
-* reservations.
-
-### Example API structure
-
-```text
-GET     /api/...
-GET     /api/{id}
-POST    /api/...
-PUT     /api/{id}
-PATCH   /api/{id}
-DELETE  /api/{id}
-```
-
-> Replace the examples above with the exact routes implemented by the controllers in the project.
-
----
-
-## 📡 Example Requests
-
-### Get available travels
-
-```bash
-curl -X GET \
-  http://localhost:8080/api/travels \
-  -H "Accept: application/json"
-```
-
-Example response:
-
-```json
-[
-  {
-    "id": 1,
-    "name": "Summer in Greece",
-    "destination": "Greece",
-    "price": 2499.99
-  }
-]
-```
-
-### Get a single travel
-
-```bash
-curl -X GET \
-  http://localhost:8080/api/travels/1 \
-  -H "Accept: application/json"
-```
-
-### Create a travel
-
-```bash
-curl -X POST \
-  http://localhost:8080/api/travels \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Summer in Greece",
-    "destination": "Greece",
-    "price": 2499.99
-  }'
-```
-
-### Update a travel
-
-```bash
-curl -X PUT \
-  http://localhost:8080/api/travels/1 \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Summer in Greece - Updated",
-    "destination": "Greece",
-    "price": 2699.99
-  }'
-```
-
-### Delete a travel
-
-```bash
-curl -X DELETE \
-  http://localhost:8080/api/travels/1
-```
-
-> The request examples above are illustrative. Adjust the endpoint paths and JSON fields to match the actual API implementation.
-
----
-
-## 🧪 Testing
-
-Run all tests:
-
-```bash
-mvn test
-```
-
-Run a clean test build:
-
-```bash
-mvn clean test
-```
-
-Run a specific test class:
-
-```bash
-mvn -Dtest=YourTestClass test
-```
-
-Run a specific test method:
-
-```bash
-mvn -Dtest=YourTestClass#yourTestMethod test
-```
-
-### Recommended test coverage
-
-Tests should cover:
-
-* business logic,
-* REST controllers,
-* repositories,
+* separation of concerns,
+* layered architecture,
+* object-oriented design,
+* maintainable code,
 * validation,
 * error handling,
-* database integration,
-* important application use cases.
+* persistence abstraction,
+* automated testing,
+* keeping database credentials and secrets outside source control.
+
+## 📚 What This Project Demonstrates
+
+This project demonstrates practical experience with:
+
+**Java → Spring Boot → REST API → Business Logic → JPA/Hibernate → PostgreSQL**
+
+It also serves as a hands-on example of building and structuring a backend application using the Spring ecosystem.
 
 ---
 
-## 🔍 Development
+## 🔗 Repository
 
-### Create a feature branch
-
-```bash
-git checkout -b feature/my-feature
-```
-
-### Make your changes
-
-Implement the required functionality while following the existing project architecture and coding conventions.
-
-### Run tests
-
-```bash
-mvn clean test
-```
-
-### Build the project
-
-```bash
-mvn clean package
-```
-
-### Commit your changes
-
-```bash
-git add .
-git commit -m "Add my feature"
-```
-
-### Push your branch
-
-```bash
-git push origin feature/my-feature
-```
-
-Then open a Pull Request.
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome.
-
-Before creating a Pull Request:
-
-* make sure the project builds successfully,
-* make sure all tests pass,
-* add tests for new functionality,
-* follow the existing coding style,
-* update documentation when API or configuration changes,
-* avoid unnecessary changes outside the scope of the feature,
-* never commit passwords, tokens or other sensitive information.
-
-### Pull Request checklist
-
-* [ ] Project builds successfully
-* [ ] All tests pass
-* [ ] New functionality is covered by tests
-* [ ] API documentation has been updated if necessary
-* [ ] Configuration changes have been documented
-* [ ] No secrets have been committed
-* [ ] Existing functionality has not been unintentionally broken
-
----
-
-## 🐛 Issues
-
-If you encounter a bug or have an idea for an improvement, open an issue in the repository:
-
-https://github.com/WojciechKesek/travel-agency/issues
-
-When reporting a bug, include:
-
-1. Description of the problem
-2. Steps to reproduce
-3. Expected behavior
-4. Actual behavior
-5. Relevant logs or stack traces
-6. Environment information
-
----
-
-## 🔐 Security
-
-Do not commit sensitive information to the repository.
-
-This includes:
-
-* database passwords,
-* API keys,
-* access tokens,
-* private credentials,
-* production configuration.
-
-Use environment variables or a local configuration file for sensitive values.
-
----
-
-## 📄 License
-
-If this project contains a `LICENSE` file, refer to it for the applicable license and usage conditions.
-
----
-
-## 👨‍💻 Development Notes
-
-The project is intended to be developed incrementally. When adding new functionality, keep responsibilities separated between the API, business logic and persistence layers.
-
-A good development flow is:
-
-```text
-HTTP Request
-     │
-     ▼
- Controller
-     │
-     ▼
- Service
-     │
-     ▼
- Repository
-     │
-     ▼
- Database
-```
-
-This structure makes the application easier to test, maintain and extend.
+[View the source code on GitHub](https://github.com/WojciechKesek/travel-agency)
