@@ -88,8 +88,7 @@ This structure keeps API, business logic and persistence responsibilities separa
 ### Database
 
 * **PostgreSQL**
-* **SQL**
-
+  
 ### Build & Development
 
 * **Maven**
